@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main>
+    <section class="container pt-4">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <div class="card flex-md-row mb-4 box-shadow h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <h3 class="name">Bedroom Lights</h3>
+                        <label for="rgbColorInput" class="form-label">Color select:</label>
+                        <input class="form-control form-control-color" id="rgbColorInput" type="color" value="{{light_data.rgb}}" oninput="bedroomLightsInput()" onchange="bedroomLightsChange()"/>
+                        <label for="brightness" class="form-label pt-1">Brightness:</label>
+                        <input class="form-range" id="brightnessInput" type="range" min="0" max="255" value="{{light_data.brightness}}"  oninput="bedroomLightsInput()" onchange="bedroomLightsChange()"/>
+                        <div class="pt-2">
+                            <button type="button" id="lightButton" class="btn btn-primary" data-toggle="button" onclick="lightButtonClick()">Lights: {{light_data.on_status}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class="col-md-4">
+                <div class="card flex-md-row mb-4 box-shadow h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <h3 class="name">Sunrise Alarm Clock</h3>
+                        <label for="alarmTimeInput" class="form-label">Alarm time:</label>
+                        <input class="form-control" id="alarmTimeInput" type="time" value="{{alarm_data.alarm_time}}" onchange="alarmTimeChange()"/>
+                        <div class="pt-2">
+                            <button type="button" id="alarmButton" class="btn btn-primary" data-toggle="button" onclick="alarmButtonClick()">Alarm: {{alarm_data.alarm_status}}</button>
+                            <script src="{{url_for('home_bp.static', filename='mqtt_light_interactions.js')}}"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
