@@ -1,11 +1,14 @@
 import json
+from typing import Any
+
+from flask import Flask
 
 from .. import mqtt, socketio, sunrise_signal
 from ..models import LightStatus
 
 
 @sunrise_signal.connect
-def sunrise_handler(app, **kwargs):
+def sunrise_handler(app: Flask, **kwargs: Any) -> None:
     message = kwargs["msg"]
     with app.app_context():
         socketio.emit("bedroom_light_message", message, broadcast=True)

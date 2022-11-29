@@ -1,19 +1,31 @@
 import json
 import logging
+from typing import TypedDict
 
 import eventlet
+from flask import Flask
 
 from . import sunrise_signal
 
 logger = logging.getLogger(__name__)
 
 
-def sunrise(app):
-    with app.app_context():
-        light_map = {"red": 64, "green": 16, "blue": 0, "white": 0, "on_status": "on", "store": True}
+class ColorMessage(TypedDict):
+    red: int
+    green: int
+    blue: int
+    white: int
+    on_status: str
+    store: bool
 
-        def gen_message():
+
+def sunrise(app: Flask) -> None:
+    with app.app_context():
+        light_map: ColorMessage = {"red": 64, "green": 16, "blue": 0, "white": 0, "on_status": "on", "store": True}
+
+        def gen_message() -> ColorMessage:
             for color in ["red", "green", "blue", "white"]:
+                assert isinstance(color, int)
                 light_map[color] = light_map[color] if light_map[color] < 256 else 255
             return light_map
 

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @home_bp.route("/")
-def home():
+def home() -> str:
     row = LightStatus.query_current_status()
     light_data = {
         "rgb": "#{0:02x}{1:02x}{2:02x}".format(row.red, row.green, row.blue),

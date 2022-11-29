@@ -1,5 +1,7 @@
 import logging
+from typing import Any
 
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, select
 
 from . import db
@@ -7,7 +9,7 @@ from . import db
 logger = logging.getLogger(__name__)
 
 
-class LightStatus(db.Model):
+class LightStatus(db.Model):  # type: ignore
     __tablename__ = "light_status"
     id = db.Column(
         db.Integer,
@@ -23,7 +25,7 @@ class LightStatus(db.Model):
     white = db.Column(db.Integer, nullable=False)
     on_status = db.Column(db.Text, nullable=False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             "\nlight_status:\n"
             f"\tred: {self.red}\n"
@@ -34,22 +36,21 @@ class LightStatus(db.Model):
         )
 
     @classmethod
-    def insert_status(cls, **kwargs):
+    def insert_status(cls, **kwargs: Any) -> None:
         logger.info(f"posting data {kwargs} to table {cls.__table__.name}")
         update = cls(**kwargs)
         db.session.add(update)
         db.session.commit()
 
     @classmethod
-    def query_current_status(cls):
+    def query_current_status(cls) -> Any:
         subquery = select(func.max(cls.id)).scalar_subquery()
-        logger.debug(subquery)
         row = db.session.query(cls).filter(cls.id == subquery).first()
         logger.debug(row)
         return row
 
 
-class AlarmStatus(db.Model):
+class AlarmStatus(db.Model):  # type: ignore
     __table_name__ = "alarm_status"
     id = db.Column(db.Integer, primary_key=True)
     time_updated = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
@@ -57,7 +58,7 @@ class AlarmStatus(db.Model):
     alarm_status = db.Column(db.Text, nullable=False)
     job_id = db.Column(db.Integer)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             "\nalarm_status:\n"
             f"\ttime_updated: {self.time_updated}\n"
@@ -67,14 +68,14 @@ class AlarmStatus(db.Model):
         )
 
     @classmethod
-    def insert_status(cls, **kwargs):
+    def insert_status(cls, **kwargs: Any) -> None:
         logger.info(f"posting data {kwargs} to table {cls.__table__.name}")
         update = cls(**kwargs)
         db.session.add(update)
         db.session.commit()
 
     @classmethod
-    def query_current_status(cls):
+    def query_current_status(cls) -> Any:
         subquery = select(func.max(cls.id)).scalar_subquery()
         logger.debug(subquery)
         row = db.session.query(cls).filter(cls.id == subquery).first()
@@ -82,7 +83,7 @@ class AlarmStatus(db.Model):
         return row
 
     @classmethod
-    def query_latest_job(cls):
+    def query_latest_job(cls) -> Any:
         subquery = select(func.max(cls.job_id)).scalar_subquery()
         logger.debug(subquery)
         row = db.session.query(cls).filter(cls.job_id == subquery).first()
