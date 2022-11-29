@@ -10,6 +10,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 eventlet.monkey_patch()
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 socketio = SocketIO()
 mqtt = Mqtt()
 db = SQLAlchemy()
@@ -18,11 +21,8 @@ event_signals = Namespace()
 sunrise_signal = event_signals.signal("sunrise")
 
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-
 def init_app() -> Flask:
+    """Create and initialize the Flask app appropriately"""
     app = Flask(__name__)
     app.config.from_object("config.Config")
 
