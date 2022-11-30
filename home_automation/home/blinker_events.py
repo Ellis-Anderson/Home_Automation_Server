@@ -23,7 +23,7 @@ def sunrise_handler(app: Flask, msg: Optional[str] = None) -> None:
             message detailing information to be propagated
     """
     if msg is None:
-        logger.error(f"Required keyword argument 'msg' was not found")
+        logger.error("Required keyword argument 'msg' was not found")
         return
     with app.app_context():
         socketio.emit("bedroom_light_message", msg, broadcast=True)
